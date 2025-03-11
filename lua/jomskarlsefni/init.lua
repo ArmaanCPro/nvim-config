@@ -39,9 +39,9 @@ autocmd('BufEnter', {
     group = JomskarlsefniGroup,
     callback = function()
         if vim.bo.filetype == "zig" then
-            --vim.cmd.colorscheme("tokyonight-night")
+            vim.cmd.colorscheme("tokyonight-night")
         else
-            vim.cmd.colorscheme("rose-pine-moon")
+            vim.cmd.colorscheme("catppuccin-frappe")
         end
     end
 })
