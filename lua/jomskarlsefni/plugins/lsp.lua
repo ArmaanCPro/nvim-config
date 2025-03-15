@@ -15,10 +15,6 @@ return {
     },
 
     config = function()
-        require("conform").setup({
-            formatters_by_ft = {
-            }
-        })
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         local capabilities = vim.tbl_deep_extend(
@@ -35,12 +31,32 @@ return {
                 "rust_analyzer",
                 "gopls",
         		"clangd",
+                "zls"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities,
                     }
+                end,
+
+                clangd = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.clangd.setup({
+                        on_attach = function(client, bufnr)
+                            local opts = { noremap = true, silent = true, buffer = bufnr }
+                            vim.keymap.set("n", "<A-o>", "<cmd>ClangdSwitchSourceHeader<CR>", opts)
+
+                            -- formatting on save
+                            client.server_capabilities.documentFormattingProvider = true
+                            vim.api.nvim_create_autocmd("BufWritePre", {
+                                buffer = bufnr,
+                                callback = function()
+                                    vim.lsp.buf.format()
+                                end,
+                            })
+                        end,
+                    })
                 end,
 
                 zls = function()
@@ -75,7 +91,15 @@ return {
                 end,
             }
         })
-
+        require("conform").setup({
+            formatters_by_ft = {
+                --cpp = { "clangd" }, clangd is not a formatter inherintly, so check the clangd.setup for formatting
+            },
+            format_on_save = {
+                lsp = true,
+                timeout_ms = 5000,
+            }
+        })
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
         cmp.setup({
