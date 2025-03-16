@@ -32,4 +32,7 @@ vim.diagnostic.config({
     underline = true,
     float = true,
 })
+
+vim.g.editorconfig = true
+
 --vim.opt.colorcolumn = "80"

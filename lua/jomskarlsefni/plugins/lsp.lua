@@ -42,20 +42,35 @@ return {
 
                 clangd = function()
                     local lspconfig = require("lspconfig")
+
+                    local function should_format()
+                        local params = vim.lsp.util.make_formatting_params({})
+                        local result = vim.lsp.buf_request_sync(0, "textDocument/formatting", params, 1000)
+
+                        if result and next(result) ~= nil then
+                            return true
+                        end
+                        return false
+                    end
+
                     lspconfig.clangd.setup({
                         cmd = { "clangd", "--fallback-style=none" }, --don't format if clang-format isn't present
                         on_attach = function(client, bufnr)
                             local opts = { noremap = true, silent = true, buffer = bufnr }
                             vim.keymap.set("n", "<A-o>", "<cmd>ClangdSwitchSourceHeader<CR>", opts)
 
-                            -- formatting on save
-                            client.server_capabilities.documentFormattingProvider = true
-                            vim.api.nvim_create_autocmd("BufWritePre", {
-                                buffer = bufnr,
-                                callback = function()
-                                    vim.lsp.buf.format()
-                                end,
-                            })
+                            if should_format() then
+                                -- formatting on save
+                                client.server_capabilities.documentFormattingProvider = true
+                                vim.api.nvim_create_autocmd("BufWritePre", {
+                                    buffer = bufnr,
+                                    callback = function()
+                                        vim.lsp.buf.format()
+                                    end,
+                                })
+                            else
+                                client.server_capabilities.documentFormattingProvider = false
+                            end
                         end,
                     })
                 end,
