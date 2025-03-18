@@ -151,6 +151,7 @@ return {
         config = function()
             require("mason-nvim-dap").setup({
                 ensure_installed = {
+                    "codelldb",
                     "delve",
                 },
                 automatic_installation = true,
@@ -176,6 +177,39 @@ return {
                             outputMode = "remote",
                         })
                         require("mason-nvim-dap").default_setup(config)
+                    end,
+
+                    codelldb = function(config)
+                        local dap = require("dap")
+                            -- Define the adapter explicitly
+                            dap.adapters.codelldb = {
+                                type = "server",
+                                port = "${port}",
+                                executable = {
+                                    command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+                                    args = { "--port", "${port}" },
+                                },
+                            }
+
+                            -- Add C/C++ debug configurations
+                            config.configurations = {
+                                {
+                                    name = "Launch file",
+                                    type = "codelldb",
+                                    request = "launch",
+                                    program = function()
+                                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                                    end,
+                                    cwd = "${workspaceFolder}",
+                                    stopOnEntry = true,
+                                    args = function()
+                                        return vim.split(vim.fn.input("args> "), " ")
+                                    end,
+                                },
+                            }
+
+                            dap.configurations.cpp = config.configurations
+                            dap.configurations.c = config.configurations
                     end,
                 },
             })
