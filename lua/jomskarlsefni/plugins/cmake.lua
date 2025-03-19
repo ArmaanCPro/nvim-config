@@ -19,9 +19,9 @@ return {
                         return require("cmake-tools").get_executable_target()
                     end,
                     cwd = "${workspaceFolder}",
-                    stopOnEntry = true,
+                    stopOnEntry = false,
                     args = function()
-                        return vim.split(vim.fn.input("Arguments: "), " ")
+                        return vim.split(vim.fn.input("args> "), " ")
                     end,
                 },
                 cmake_dap_open_command = require("dap").continue,

@@ -201,7 +201,7 @@ return {
                                         return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
                                     end,
                                     cwd = "${workspaceFolder}",
-                                    stopOnEntry = true,
+                                    stopOnEntry = false,
                                     args = function()
                                         return vim.split(vim.fn.input("args> "), " ")
                                     end,
