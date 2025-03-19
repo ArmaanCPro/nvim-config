@@ -25,12 +25,13 @@ return {
                     floats = "dark",
                 }
             })
-            ColorMyPencils();
+            --ColorMyPencils();
         end
     },
     {
         "rose-pine/neovim",
         name = "rose-pine",
+        lazy = false,
         config = function()
             require('rose-pine').setup({
                 disable_background = true,
@@ -39,12 +40,13 @@ return {
                 },
             })
 
-            ColorMyPencils();
+            --ColorMyPencils();
         end
     },
     {
         "catppuccin/nvim",
         name = "catppuccin",
+        lazy = false,
         priority = 1000,
         config = function()
             require("catppuccin").setup({
@@ -53,7 +55,7 @@ return {
                 no_italic = true,
                 term_colors = true,
             })
-            ColorMyPencils("catppuccin-frappe");
+            --ColorMyPencils("catppuccin-frappe");
         end
     }
 

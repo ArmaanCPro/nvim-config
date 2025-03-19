@@ -35,18 +35,6 @@ autocmd({"BufWritePre"}, {
     command = [[%s/\s\+$//e]],
 })
 
-autocmd('BufEnter', {
-    group = JomskarlsefniGroup,
-    callback = function()
-        if vim.bo.filetype == "zig" then
-            vim.cmd.colorscheme("tokyonight-night")
-        else
-            vim.cmd.colorscheme("catppuccin-frappe")
-        end
-    end
-})
-
-
 autocmd('LspAttach', {
     group = JomskarlsefniGroup,
     callback = function(e)
