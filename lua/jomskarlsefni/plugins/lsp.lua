@@ -30,7 +30,7 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
-        		"clangd",
+                "clangd",
                 "zls"
             },
             handlers = {
@@ -89,7 +89,6 @@ return {
                     })
                     vim.g.zig_fmt_parse_errors = 0
                     vim.g.zig_fmt_autosave = 0
-
                 end,
                 ["lua_ls"] = function()
                     local lspconfig = require("lspconfig")
@@ -104,6 +103,34 @@ return {
                             }
                         }
                     }
+                end,
+                rust_analyzer = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.rust_analyzer.setup({
+                    capabilities = capabilities,
+                    settings = {
+                        ["rust-analyzer"] = {
+                            assist = {
+                                importEnforceGranularity = true,
+                                importPrefix = "by_self",
+                            },
+                            cargo = {
+                                loadOutDirsFromCheck = true,
+                            },
+                            procMacro = {
+                                enable = true,
+                            },
+                            checkOnSave = {
+                                command = "clippy", -- Use Clippy instead of `check` (which is cargo check)
+                            },
+                            inlayHints = {
+                                lifetimeElisionHints = { enable = true, useParameterNames = true },
+                                reborrowHints = { enable = "always" },
+                                bindingModeHints = { enable = true },
+                            },
+                        },
+                    },
+                })
                 end,
             }
         })
