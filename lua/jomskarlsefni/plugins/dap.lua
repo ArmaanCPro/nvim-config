@@ -191,26 +191,73 @@ return {
                             },
                         }
 
-                        -- Add C/C++ debug configurations
-                        config.configurations = {
+                        -- C/C++ dap config
+                        local status, cmake = pcall(require, "cmake-tools")
+                        if status and cmake.is_cmake_project() then
+                            dap.configurations.c = {
+                                {
+                                    name = "Launch file",
+                                    type = "codelldb",
+                                    request = "launch",
+                                    program = function()
+                                        return cmake.get_build_target_path()
+                                    end,
+                                    cwd = "${workspaceFolder}",
+                                    stopOnEntry = false,
+                                    args = function()
+                                        return cmake.get_launch_args()
+                                    end,
+                                }
+                            }
+                        else
+                            dap.configurations.c = {
+                                {
+                                    name = "Launch file",
+                                    type = "codelldb",
+                                    request = "launch",
+                                    program = function()
+                                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                                    end,
+                                    cwd = "${workspaceFolder}",
+                                    stopOnEntry = false,
+                                    args = function()
+                                        return vim.split(vim.fn.input("args> "), " ")
+                                    end,
+                                }
+                            }
+                        end
+                        dap.configurations.cpp = dap.configurations.c
+
+                        dap.configurations.rust = {
                             {
                                 name = "Launch file",
                                 type = "codelldb",
                                 request = "launch",
                                 program = function()
-                                    return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                                    -- Determine the correct working directory first
+                                    local cwd = vim.fn.getcwd()
+                                    if vim.fn.filereadable(cwd .. "/Cargo.toml") == 1 then
+                                        -- Default to the compiled Cargo binary in target/debug/
+                                        return vim.fn.input("Path to executable: ", cwd .. "/target/debug/", "file")
+                                    else
+                                        return vim.fn.input("Path to executable: ", cwd .. "/", "file")
+                                    end
                                 end,
-                                cwd = "${workspaceFolder}",
+                                cwd = function()
+                                    -- Ensure the cwd is consistent with the program's location
+                                    local cwd = vim.fn.getcwd()
+                                    if vim.fn.filereadable(cwd .. "/Cargo.toml") == 1 then
+                                        return cwd .. "/target/debug"
+                                    else
+                                        return cwd
+                                    end
+                                end,
                                 stopOnEntry = false,
                                 args = function()
                                     return vim.split(vim.fn.input("args> "), " ")
                                 end,
                             },
                         }
-
-                        dap.configurations.cpp = config.configurations
-                        dap.configurations.c = config.configurations
-                        dap.configurations.rust = config.configurations
                     end,
                 },
             })

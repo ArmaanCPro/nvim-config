@@ -4,6 +4,7 @@ return {
         opts = {},
         config = function()
             local osys = require("cmake-tools.osys")
+            local cmake = require("cmake-tools")
             require("cmake-tools").setup({
                 cmake_command = "cmake",
                 cmake_build_directory = "build",
@@ -16,12 +17,12 @@ return {
                     type = "codelldb",
                     request = "launch",
                     program = function()
-                        return require("cmake-tools").get_executable_target()
+                        return cmake.get_build_target_path()
                     end,
                     cwd = "${workspaceFolder}",
                     stopOnEntry = false,
                     args = function()
-                        return vim.split(vim.fn.input("args> "), " ")
+                        return vim.split(vim.fn.input("args> "), cmake.get_launch_args())
                     end,
                 },
                 cmake_dap_open_command = require("dap").continue,
