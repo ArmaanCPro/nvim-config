@@ -234,23 +234,38 @@ return {
                                 type = "codelldb",
                                 request = "launch",
                                 program = function()
-                                    -- Determine the correct working directory first
-                                    local cwd = vim.fn.getcwd()
-                                    if vim.fn.filereadable(cwd .. "/Cargo.toml") == 1 then
-                                        -- Default to the compiled Cargo binary in target/debug/
-                                        return vim.fn.input("Path to executable: ", cwd .. "/target/debug/", "file")
-                                    else
-                                        return vim.fn.input("Path to executable: ", cwd .. "/", "file")
+                                    -- Locate the Cargo.toml file
+                                    local cargo_toml_path = vim.fn.findfile("Cargo.toml", ".;")
+                                    if cargo_toml_path == "" then
+                                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
                                     end
+
+                                    -- Extract the workspace root directory
+                                    local workspace_root = vim.fn.fnamemodify(cargo_toml_path, ":h")
+
+                                    -- Read the Cargo.toml file and extract the name field
+                                    local binary_name = nil
+                                    for line in io.lines(cargo_toml_path) do
+                                        local name = line:match('^name%s*=%s*"(.-)"')
+                                        if name then
+                                            binary_name = name
+                                            break
+                                        end
+                                    end
+
+                                    -- If we found a binary name, use it; otherwise, fallback to the folder name
+                                    if not binary_name or binary_name == "" then
+                                        binary_name = vim.fn.fnamemodify(workspace_root, ":t")
+                                    end
+
+                                    -- Suggest the compiled executable in target/debug/
+                                    return vim.fn.input("Path to executable: ",
+                                        workspace_root .. "/target/debug/" .. binary_name, "file")
                                 end,
                                 cwd = function()
-                                    -- Ensure the cwd is consistent with the program's location
-                                    local cwd = vim.fn.getcwd()
-                                    if vim.fn.filereadable(cwd .. "/Cargo.toml") == 1 then
-                                        return cwd .. "/target/debug"
-                                    else
-                                        return cwd
-                                    end
+                                    -- Ensure the cwd is set to the Cargo workspace root
+                                    local workspace_root = vim.fn.fnamemodify(vim.fn.findfile("Cargo.toml", ".;"), ":h")
+                                    return workspace_root ~= "" and workspace_root or vim.fn.getcwd()
                                 end,
                                 stopOnEntry = false,
                                 args = function()
