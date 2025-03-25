@@ -41,5 +41,5 @@ vim.g.editorconfig = true
 
 vim.api.nvim_set_keymap("v", "<", "<gv", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("v", ">", ">gv", { noremap = true, silent = true })
-
+vim.api.nvim_set_keymap("i", "jk", "<Esc>", { noremap = true, silent = true })
 --vim.opt.colorcolumn = "80"
