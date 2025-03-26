@@ -16,14 +16,9 @@ return {
                 cmake_dap_configuration = {
                     type = "codelldb",
                     request = "launch",
-                    program = function()
-                        return cmake.get_build_target_path()
-                    end,
-                    cwd = "${workspaceFolder}",
                     stopOnEntry = false,
-                    args = function()
-                        return vim.split(vim.fn.input("args> "), cmake.get_launch_args())
-                    end,
+                    runInTerminal = true,
+                    console = "integratedTerminal",
                 },
                 cmake_dap_open_command = require("dap").continue,
             })

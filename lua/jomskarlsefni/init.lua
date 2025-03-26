@@ -2,6 +2,7 @@ require("jomskarlsefni.remap")
 require("jomskarlsefni.lazy")
 require("jomskarlsefni.set")
 
+
 local augroup = vim.api.nvim_create_augroup
 local JomskarlsefniGroup = augroup('Jomskarlsefni', {})
 
