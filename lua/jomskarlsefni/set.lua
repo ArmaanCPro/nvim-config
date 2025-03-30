@@ -1,7 +1,7 @@
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
-vim.cmd.colorscheme("tokyonight-storm")
+vim.cmd.colorscheme("catppuccin-mocha")
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
