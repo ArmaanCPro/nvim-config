@@ -21,6 +21,14 @@ return {
                     console = "integratedTerminal",
                 },
                 cmake_dap_open_command = require("dap").continue,
+                cmake_executor = {
+                    name = "toggleterm",
+                    opts = { direction = "horizontal" },
+                },
+                cmake_runner = {
+                    name = "toggleterm",
+                    opts = { direction = "horizontal" },
+                }
             })
         end
     },
