@@ -16,12 +16,12 @@ return {
         config = function()
             require("tokyonight").setup({
                 style = "storm",
-                transparent = false,
+                transparent = true,
                 terminal_colors = true,
                 styles = {
                     comments = { italic = false },
                     keywords = { italic = false },
-                    sidebars = "dark",
+                    --sidebars = "dark",
                     floats = "dark",
                 }
             })
@@ -50,12 +50,12 @@ return {
         priority = 1000,
         config = function()
             require("catppuccin").setup({
-                flavor = "frappe",
-                transparent_background = false,
+                flavor = "mocha",
+                transparent_background = true,
                 no_italic = true,
                 term_colors = true,
             })
-            --ColorMyPencils("catppuccin-frappe");
+            --ColorMyPencils();
         end
     }
 
