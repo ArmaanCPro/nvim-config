@@ -30,6 +30,9 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
+vim.opt.fixendofline = true
+vim.opt.writebackup = false
+
 vim.diagnostic.config({
     virtual_text = true,
     signs = true,

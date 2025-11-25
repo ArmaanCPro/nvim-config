@@ -55,6 +55,7 @@ return {
 
                     lspconfig.clangd.setup({
                         cmd = { "clangd", "--fallback-style=none" }, --don't format if clang-format isn't present
+
                         on_attach = function(client, bufnr)
                             local opts = { noremap = true, silent = true, buffer = bufnr }
                             vim.keymap.set("n", "<A-o>", "<cmd>ClangdSwitchSourceHeader<CR>", opts)
