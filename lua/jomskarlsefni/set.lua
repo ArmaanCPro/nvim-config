@@ -1,7 +1,8 @@
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
-ColorMyPencils() -- put color scheme here (default rosepine)
+--ColorMyPencils() -- put color scheme here (default rosepine)
+vim.cmd.colorscheme("rose-pine-moon")
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
