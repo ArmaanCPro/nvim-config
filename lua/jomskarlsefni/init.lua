@@ -12,12 +12,6 @@ function R(name)
     require("plenary.reload").reload_module(name)
 end
 
-vim.filetype.add({
-    extension = {
-        templ = 'templ',
-    }
-})
-
 autocmd('TextYankPost', {
     group = yank_group,
     pattern = '*',
@@ -47,9 +41,13 @@ autocmd('LspAttach', {
         vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
         vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
         vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-        vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-        vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
     end
+})
+
+-- nvim-treesitter highlighting
+autocmd('FileType', {
+    pattern = { 'filetype>' },
+    callback = function() vim.treesitter.start() end,
 })
 
 vim.g.netrw_browse_split = 0
@@ -58,6 +56,6 @@ vim.g.netrw_winsize = 25
 
 -- LSP
 -- configs are given by nvim-lspconfig plugin and overridden in /lsp dir
-
-vim.lsp.enable({'lua_ls', 'ts_ls', 'clangd', 'zls', 'rust-analyzer'})
+-- mason-lspconfig plugin automatically enables all installed lsp servers
+--vim.lsp.enable({'lua_ls', 'ts_ls', 'clangd', 'zls', 'rust-analyzer'})
 

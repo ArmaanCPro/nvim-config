@@ -11,7 +11,7 @@ return {
                 theme = 'palenight',
             },
             sections = {
-                lualine_x = { 'copilot', 'encoding', 'fileformat', 'filetype' },
+                lualine_x = { 'encoding', 'fileformat', 'filetype' },
             },
         })
     end

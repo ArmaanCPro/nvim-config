@@ -18,7 +18,7 @@ return {
                 preview_window = false,
                 title = true,
                 mouse_providers = {
-                    'LSP'
+                    'hover.providers.lsp'
                 },
                 mouse_delay = 500
             })
