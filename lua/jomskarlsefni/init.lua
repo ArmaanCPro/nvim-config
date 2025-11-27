@@ -23,7 +23,7 @@ autocmd('TextYankPost', {
     end,
 })
 
-autocmd({"BufWritePre"}, {
+autocmd({ "BufWritePre" }, {
     group = JomskarlsefniGroup,
     pattern = "*",
     command = [[%s/\s\+$//e]],
@@ -47,7 +47,10 @@ autocmd('LspAttach', {
 -- nvim-treesitter highlighting
 autocmd('FileType', {
     pattern = { 'filetype>' },
-    callback = function() vim.treesitter.start() end,
+    callback = function()
+        vim.treesitter.start()
+        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    end,
 })
 
 vim.g.netrw_browse_split = 0
@@ -55,7 +58,6 @@ vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
 
 -- LSP
--- configs are given by nvim-lspconfig plugin and overridden in /lsp dir
+-- configs are given by nvim-lspconfig plugin and overridden in /after/lsp dir
 -- mason-lspconfig plugin automatically enables all installed lsp servers
 --vim.lsp.enable({'lua_ls', 'ts_ls', 'clangd', 'zls', 'rust-analyzer'})
-

@@ -60,4 +60,5 @@ return {
         end
     }
 
+    -- consider folke/styler.nvim
 }
