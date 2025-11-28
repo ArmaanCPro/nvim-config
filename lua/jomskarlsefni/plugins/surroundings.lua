@@ -19,7 +19,7 @@ return {
         dependencies = { 'nvim-lua/plenary.nvim' },
         opts = {},
         keys = {
-            { "<leader>ft", modes = { "n" }, "<cmd>TodoTelescope<CR>", desc = "Find TODOs" },
+            { "<leader>ft", mode = { "n" }, "<cmd>TodoTelescope<CR>", desc = "Find TODOs" },
         },
     },
     {

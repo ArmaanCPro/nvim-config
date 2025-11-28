@@ -7,6 +7,9 @@ return {
             "nvim-telescope/telescope.nvim",
         },
         cmd = 'Neogit',
+        keys = {
+            { "<leader>gs", mode = { "n" }, ":Neogit<CR>", desc = "Neogit Status" },
+        },
         config = function()
             local neogit = require('neogit')
             neogit.setup({
@@ -97,5 +100,9 @@ return {
     {
         "sindrets/diffview.nvim",
         cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
+        keys = {
+            { "<leader>gD", mode = { "n" }, ":DiffviewOpen<CR>",  desc = "Open Diffview" },
+            { "<leader>gC", mode = { "n" }, ":DiffviewClose<CR>", desc = "Close Diffview" },
+        },
     },
 }
