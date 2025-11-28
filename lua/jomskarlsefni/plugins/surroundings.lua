@@ -4,20 +4,28 @@ return {
         opts = {},
         config = function()
             require('Comment').setup()
+            -- gcc, gc, gc}
         end,
     },
     {
-        "kylechui/nvim-surround",
-        version = "^3.0.0",
+        'nvim-mini/mini.surround',
         event = "VeryLazy",
         config = function()
-            require("nvim-surround").setup({
-            })
+            require("mini.surround").setup()
         end
     },
     {
         'folke/todo-comments.nvim',
-        dependencies = {'nvim-lua/plenary.nvim'},
-        opts = {}
-    }
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        opts = {},
+        keys = {
+            { "<leader>ft", modes = { "n" }, "<cmd>TodoTelescope<CR>", desc = "Find TODOs" },
+        },
+    },
+    {
+        'max397574/better-escape.nvim',
+        config = function()
+            require('better_escape').setup()
+        end,
+    },
 }
