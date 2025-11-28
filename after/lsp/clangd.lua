@@ -22,6 +22,10 @@ end
 
 --@type vim.lsp.Config
 return {
+  cmd = {
+      'clangd',
+      '--clang-tidy',
+  },
   on_attach = function(client, bufnr)
     vim.api.nvim_buf_create_user_command(bufnr, 'LspClangdSwitchSourceHeader', function()
       switch_source_header(bufnr, client)
