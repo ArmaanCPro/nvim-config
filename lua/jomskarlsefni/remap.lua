@@ -30,3 +30,6 @@ vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv") -- move line down(v)
 -- remap visual block mode to ctrl+b as some terminals override ctrl+v to be paste
 vim.keymap.set("n", "<C-b>", "<C-v>", { desc = "Enter visual block mode" })
 
+-- remove highlight after search
+vim.keymap.set('n', '<leader>/', ':noh<cr>', { noremap = true, silent = true })
+
