@@ -20,18 +20,50 @@ local function switch_source_header(bufnr, client)
   end, bufnr)
 end
 
+local function symbol_info(bufnr, client)
+  local method_name = 'textDocument/symbolInfo'
+  ---@diagnostic disable-next-line:param-type-mismatch
+  if not client or not client:supports_method(method_name) then
+    return vim.notify('Clangd client not found', vim.log.levels.ERROR)
+  end
+  local win = vim.api.nvim_get_current_win()
+  local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
+  ---@diagnostic disable-next-line:param-type-mismatch
+  client:request(method_name, params, function(err, res)
+    if err or #res == 0 then
+      -- Clangd always returns an error, there is no reason to parse it
+      return
+    end
+    local container = string.format('container: %s', res[1].containerName) ---@type string
+    local name = string.format('name: %s', res[1].name) ---@type string
+    vim.lsp.util.open_floating_preview({ name, container }, '', {
+      height = 2,
+      width = math.max(string.len(name), string.len(container)),
+      focusable = false,
+      focus = false,
+      title = 'Symbol Info',
+    })
+  end, bufnr)
+end
+
 --@type vim.lsp.Config
 return {
   cmd = {
       'clangd',
       '--clang-tidy',
+      '--fallback-style=Microsoft'
   },
   on_attach = function(client, bufnr)
     vim.api.nvim_buf_create_user_command(bufnr, 'LspClangdSwitchSourceHeader', function()
       switch_source_header(bufnr, client)
     end, { desc = 'Switch between source/header' })
 
-    vim.keymap.set("n", "<A-o>", "<cmd>LspClangdSwitchSourceHeader<CR>", { noremap = true, silent = true, buffer = bufnr })
+    vim.api.nvim_buf_create_user_command(bufnr, 'LspClangdShowSymbolInfo', function()
+      symbol_info(bufnr, client)
+    end, { desc = 'Show symbol info' })
+
+    vim.keymap.set("n", "<A-o>", "<cmd>LspClangdSwitchSourceHeader<CR>", { noremap = true, silent = true, buffer = bufnr, desc = "Clangd Switch Source Header" })
+    vim.keymap.set("n", "<C-i>", "<cmd>LspClangdShowSymbolInfo<CR>", { noremap = true, silent = true, buffer = bufnr, desc = "Clangd Show Symbol Info" })
   end,
 }
 
