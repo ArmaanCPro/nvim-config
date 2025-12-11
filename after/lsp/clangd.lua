@@ -51,6 +51,7 @@ return {
   cmd = {
       'clangd',
       '--clang-tidy',
+      '--experimental-modules-support',
       '--fallback-style=Microsoft'
   },
   on_attach = function(client, bufnr)
